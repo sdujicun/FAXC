@@ -1,4 +1,4 @@
-package weka.filters.timeseries.shapelet_transforms.lfdp;
+package weka.filters.timeseries.shapelet_transforms.idp;
 
 public class Line {
 	private int begin;

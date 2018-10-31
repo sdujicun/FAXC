@@ -17,7 +17,7 @@ import weka.classifiers.trees.EnhancedRandomForest;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
 import weka.core.shapelet.QualityMeasures;
-import weka.filters.timeseries.shapelet_transforms.ShapeletTransformWithSubclassSampleAndLFDP;
+import weka.filters.timeseries.shapelet_transforms.ShapeletTransformWithSubclassSampleAndIDP;
 import weka.filters.timeseries.shapelet_transforms.classValue.BinarisedClassValue;
 import weka.filters.timeseries.shapelet_transforms.subsequenceDist.ImprovedOnlineSubSeqDistance;
 
@@ -44,7 +44,7 @@ public class FSSTrainTimeTest {
 			Instances train= utilities.ClassifierTools.loadData(filePath + "_TRAIN");
 			
 			
-			ShapeletTransformWithSubclassSampleAndLFDP transform = new ShapeletTransformWithSubclassSampleAndLFDP();
+			ShapeletTransformWithSubclassSampleAndIDP transform = new ShapeletTransformWithSubclassSampleAndIDP();
 			transform.setRoundRobin(true);
 			transform.turnOffLog();
 			// construct shapelet classifiers.
@@ -71,7 +71,7 @@ public class FSSTrainTimeTest {
 
 		} catch (Exception ex) {
 			Logger.getLogger(
-					ShapeletTransformWithSubclassSampleAndLFDP.class.getName())
+					ShapeletTransformWithSubclassSampleAndIDP.class.getName())
 					.log(Level.SEVERE, null, ex);
 		}
 	}

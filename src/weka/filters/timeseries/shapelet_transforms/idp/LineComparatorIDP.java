@@ -1,9 +1,9 @@
-package weka.filters.timeseries.shapelet_transforms.lfdp;
+package weka.filters.timeseries.shapelet_transforms.idp;
 
 import java.util.Comparator;
 
 
-public class LineComparatorLFDP implements Comparator {
+public class LineComparatorIDP implements Comparator {
 	public final int compare(Object pFirst, Object pSecond) {
 		double a = ((Line) pFirst).getWeight();
 		double b = ((Line) pSecond).getWeight();

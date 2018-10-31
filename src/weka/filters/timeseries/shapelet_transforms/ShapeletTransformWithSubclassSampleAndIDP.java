@@ -64,7 +64,7 @@ import weka.filters.timeseries.shapelet_transforms.subsequenceDist.SubSeqDistanc
  *
  * @author Aaron Bostrom
  */
-public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilter {
+public class ShapeletTransformWithSubclassSampleAndIDP extends SimpleBatchFilter {
 
 	// Variables for experiments
 	protected static long subseqDistOpCount;
@@ -153,20 +153,20 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 	protected static final double ROUNDING_ERROR_CORRECTION = 0.000000000000001;
 	protected int[] dataSourceIDs;
 
-	protected double LFDPrate=0.05;
+	protected double IDPrate=0.05;
 
-	public double getLFDPrate() {
-		return LFDPrate;
+	public double getIDPrate() {
+		return IDPrate;
 	}
 
-	public void setLFDPrate(double lFDPrate) {
-		LFDPrate = lFDPrate;
+	public void setIDPrate(double IDPrate) {
+		this.IDPrate = IDPrate;
 	}
 
 	/**
 	 * Default constructor; Quality measure defaults to information gain.
 	 */
-	public ShapeletTransformWithSubclassSampleAndLFDP() {
+	public ShapeletTransformWithSubclassSampleAndIDP() {
 		this(DEFAULT_NUMSHAPELETS, DEFAULT_MINSHAPELETLENGTH, DEFAULT_MAXSHAPELETLENGTH, QualityMeasures.ShapeletQualityChoice.INFORMATION_GAIN);
 	}
 
@@ -176,7 +176,7 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 	 *
 	 * @param shapes
 	 */
-	public ShapeletTransformWithSubclassSampleAndLFDP(ArrayList<Shapelet> shapes) {
+	public ShapeletTransformWithSubclassSampleAndIDP(ArrayList<Shapelet> shapes) {
 		this();
 		this.shapelets = shapes;
 		this.shapeletsTrained = true;
@@ -189,7 +189,7 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 	 * @param k
 	 *            the number of shapelets to be generated
 	 */
-	public ShapeletTransformWithSubclassSampleAndLFDP(int k) {
+	public ShapeletTransformWithSubclassSampleAndIDP(int k) {
 		this(k, DEFAULT_MINSHAPELETLENGTH, DEFAULT_MAXSHAPELETLENGTH, QualityMeasures.ShapeletQualityChoice.INFORMATION_GAIN);
 	}
 
@@ -204,7 +204,7 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 	 * @param maxShapeletLength
 	 *            maximum length of shapelets
 	 */
-	public ShapeletTransformWithSubclassSampleAndLFDP(int k, int minShapeletLength, int maxShapeletLength) {
+	public ShapeletTransformWithSubclassSampleAndIDP(int k, int minShapeletLength, int maxShapeletLength) {
 		this(k, minShapeletLength, maxShapeletLength, QualityMeasures.ShapeletQualityChoice.INFORMATION_GAIN);
 
 	}
@@ -222,7 +222,7 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 	 * @param qualityChoice
 	 *            the shapelet quality measure to be used with this filter
 	 */
-	public ShapeletTransformWithSubclassSampleAndLFDP(int k, int minShapeletLength, int maxShapeletLength, weka.core.shapelet.QualityMeasures.ShapeletQualityChoice qualityChoice) {
+	public ShapeletTransformWithSubclassSampleAndIDP(int k, int minShapeletLength, int maxShapeletLength, weka.core.shapelet.QualityMeasures.ShapeletQualityChoice qualityChoice) {
 		this.numShapelets = k;
 		this.shapelets = new ArrayList<>();
 		this.shapeletsTrained = false;
@@ -541,7 +541,7 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 		// we might round robin the data in here. So we return the changed
 		// dataset.
 		Instances dataset = initDataSouce(data);
-		shapelets = findBestKShapeletsCacheBasedOnLFDP(dataset); // get k
+		shapelets = findBestKShapeletsCacheBasedOnIDP(dataset); // get k
 																// shapelets
 		shapeletsTrained = true;
 
@@ -608,7 +608,7 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 		return output;
 	}
 
-	public ArrayList<Shapelet> findBestKShapeletsCacheBasedOnLFDP(Instances data) {
+	public ArrayList<Shapelet> findBestKShapeletsCacheBasedOnIDP(Instances data) {
 		ArrayList<Shapelet> seriesShapelets; // temp store of all shapelets for
 												// each time series
 		// edit by jc
@@ -623,7 +623,7 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 			// set the clas value of the series we're working with.
 			classValue.setShapeletValue(data.get(dataSet));
 
-			seriesShapelets = searchFunction.SearchForShapeletsInSeriesBasedLFDP(data.get(dataSet), this::checkCandidate,this.LFDPrate);
+			seriesShapelets = searchFunction.SearchForShapeletsInSeriesBasedIDP(data.get(dataSet), this::checkCandidate,this.IDPrate);
 			Collections.sort(seriesShapelets, shapeletComparator);
 
 			seriesShapelets = removeSelfSimilar(seriesShapelets);
@@ -663,14 +663,14 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 		}
 	}
 
-	public ArrayList<Shapelet> findBestKShapeletsCacheBasedOnLFDP(int numShapelets, Instances data) {
+	public ArrayList<Shapelet> findBestKShapeletsCacheBasedOnIDP(int numShapelets, Instances data) {
 		this.numShapelets = numShapelets;
 		// setup classsValue
 		classValue.init(data);
 		// setup subseqDistance
 		subseqDistance.init(data);
 		initDataSouce(data);
-		return findBestKShapeletsCacheBasedOnLFDP(data);
+		return findBestKShapeletsCacheBasedOnIDP(data);
 	}
 
 	/**
@@ -906,14 +906,14 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 	 *         original log file
 	 * @throws Exception
 	 */
-	public static ShapeletTransformWithSubclassSampleAndLFDP createFilterFromFile(String fileName) throws Exception {
+	public static ShapeletTransformWithSubclassSampleAndIDP createFilterFromFile(String fileName) throws Exception {
 		return createFilterFromFile(fileName, Integer.MAX_VALUE);
 	}
 
-	public double timingForSingleShapeletBasedOnLFDP(Instances data) {
+	public double timingForSingleShapeletBasedOnIDP(Instances data) {
 		data = roundRobinData(data, null);
 		long startTime = System.nanoTime();
-		findBestKShapeletsCacheBasedOnLFDP(1, data);
+		findBestKShapeletsCacheBasedOnIDP(1, data);
 		long finishTime = System.nanoTime();
 		return (double) (finishTime - startTime) / 1000000000.0;
 	}
@@ -1002,13 +1002,13 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 	 *         original log file
 	 * @throws Exception
 	 */
-	public static ShapeletTransformWithSubclassSampleAndLFDP createFilterFromFile(String fileName, int maxShapelets) throws Exception {
+	public static ShapeletTransformWithSubclassSampleAndIDP createFilterFromFile(String fileName, int maxShapelets) throws Exception {
 
 		File input = new File(fileName);
 		Scanner scan = new Scanner(input);
 		scan.useDelimiter("\n");
 
-		ShapeletTransformWithSubclassSampleAndLFDP sf = new ShapeletTransformWithSubclassSampleAndLFDP();
+		ShapeletTransformWithSubclassSampleAndIDP sf = new ShapeletTransformWithSubclassSampleAndIDP();
 		ArrayList<Shapelet> shapelets = new ArrayList<>();
 
 		String shapeletContentString;
@@ -1146,10 +1146,10 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 	 * @return
 	 * @throws Exception
 	 */
-	public long opCountForSingleShapeletBasedOnLFDP(Instances data) throws Exception {
+	public long opCountForSingleShapeletBasedOnIDP(Instances data) throws Exception {
 		data = roundRobinData(data, null);
 		subseqDistOpCount = 0;
-		findBestKShapeletsCacheBasedOnLFDP(1, data);
+		findBestKShapeletsCacheBasedOnIDP(1, data);
 		return subseqDistOpCount;
 	}
 
@@ -1179,7 +1179,7 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 			train = utilities.ClassifierTools.loadData(filePath + "_TRAIN");
 			// use fold as the seed.
 			// train = InstanceTools.subSample(train, 100, fold);
-			ShapeletTransformWithSubclassSampleAndLFDP transform = new ShapeletTransformWithSubclassSampleAndLFDP();
+			ShapeletTransformWithSubclassSampleAndIDP transform = new ShapeletTransformWithSubclassSampleAndIDP();
 			transform.setRoundRobin(true);
 			// construct shapelet classifiers.
 			transform.setClassValue(new BinarisedClassValue());
@@ -1247,7 +1247,7 @@ public class ShapeletTransformWithSubclassSampleAndLFDP extends SimpleBatchFilte
 			// System.out.println(accuracy);
 
 		} catch (Exception ex) {
-			Logger.getLogger(ShapeletTransformWithSubclassSampleAndLFDP.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(ShapeletTransformWithSubclassSampleAndIDP.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 }

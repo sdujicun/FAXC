@@ -1,15 +1,15 @@
-package weka.filters.timeseries.shapelet_transforms.lfdp;
+package weka.filters.timeseries.shapelet_transforms.idp;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PLR_LFDP {
+public class PLR_IDP {
 	private int[] point;
 	private double[] eui;
 	private List<Line> lineList;
 	private double data[];
 
-	public PLR_LFDP(double[] series) {
+	public PLR_IDP(double[] series) {
 		int length = series.length;
 		point = new int[length];
 		eui = new double[length];
@@ -29,19 +29,19 @@ public class PLR_LFDP {
 	 *            分段误差
 	 * @return
 	 */
-	public int[] choosePointLFDPByThreshold(double threshold) {
+	public int[] choosePointIDPByThreshold(double threshold) {
 		point[0] = 1;
 		point[data.length - 1] = 1;
 		updataInfo(0, data.length - 1);
 		Line line;
 		do  {
-			lineList.sort(new LineComparatorLFDP());
+			lineList.sort(new LineComparatorIDP());
 			line = lineList.get(0);
 			point[line.getPmax()] = 1;
 			updataInfo(line.getBegin(), line.getPmax());
 			updataInfo(line.getPmax(), line.getEnd());
 			lineList.remove(0);
-			lineList.sort(new LineComparatorLFDP());
+			lineList.sort(new LineComparatorIDP());
 			line = lineList.get(0);
 		}while(line.getWeight() >= threshold);
 		return point;
@@ -55,11 +55,11 @@ public class PLR_LFDP {
 	 *            分段个数
 	 * @return
 	 */
-	public int[] choosePointLFDPByNumber(int number) {
+	public int[] choosePointIDPByNumber(int number) {
 		point[0] = 1;
 		point[data.length - 1] = 1;
 		updataInfo(0, data.length - 1);
-		lineList.sort(new LineComparatorLFDP());
+		lineList.sort(new LineComparatorIDP());
 		int pointNumber = 2;
 		while (pointNumber < number) {
 			pointNumber++;
@@ -69,7 +69,7 @@ public class PLR_LFDP {
 			updataInfo(line.getBegin(), line.getPmax());
 			updataInfo(line.getPmax(), line.getEnd());
 			lineList.remove(0);
-			lineList.sort(new LineComparatorLFDP());
+			lineList.sort(new LineComparatorIDP());
 		}
 		return point;
 
@@ -91,7 +91,7 @@ public class PLR_LFDP {
 				distmax = eui[i];
 			}
 		}
-		// weight计算PLR_LFDP和PLR_SIP不同
+		// weight计算PLR_IDP和PLR_SIP不同
 		double weight = 2 * distmax > dist ? 2 * distmax : dist;
 		Line line = new Line(begin, end, dist, distmax, pmax, weight);
 		lineList.add(line);
@@ -105,42 +105,42 @@ public class PLR_LFDP {
 	}
 
 	// 按阈值返回索引
-	public int[] getLFDPIndexByThreshold(double threshold) {
-		int[] LFDP = choosePointLFDPByThreshold(threshold);
+	public int[] getIDPIndexByThreshold(double threshold) {
+		int[] IDP = choosePointIDPByThreshold(threshold);
 		List<Integer> list = new ArrayList<Integer>();
 		int number = 0;
-		for (int i = 0; i < LFDP.length; i++) {
-			if (LFDP[i] == 1) {
+		for (int i = 0; i < IDP.length; i++) {
+			if (IDP[i] == 1) {
 				number++;
 				list.add(i);
 			}
 		}
-		int[] LFDPindex = new int[number];
+		int[] IDPindex = new int[number];
 		for (int i = 0; i < list.size(); i++) {
-			LFDPindex[i] = list.get(i);
+			IDPindex[i] = list.get(i);
 		}
-		return LFDPindex;
+		return IDPindex;
 	}
 
 	// 按个数返回索引
-	public int[] getLFDPIndexByNumber(int number) {
-		int[] LFDP = choosePointLFDPByNumber(number);
+	public int[] getIDPIndexByNumber(int number) {
+		int[] IDP = choosePointIDPByNumber(number);
 		
-		int[] LFDPindex = new int[number];
+		int[] IDPindex = new int[number];
 		int index = 0;
-		for (int i = 0; i < LFDP.length; i++) {
-			if (LFDP[i] == 1) {
-				LFDPindex[index]=i;
+		for (int i = 0; i < IDP.length; i++) {
+			if (IDP[i] == 1) {
+				IDPindex[index]=i;
 				index++;
 			}
 		}
-		return LFDPindex;
+		return IDPindex;
 	}
 	public static void main(String[] args){
 		double[] a={10.1,12.3,12.0,15.0,17.0,18.0,12.3,14.4,12.3,5.6,12.4,8.6};
-		PLR_LFDP p=new PLR_LFDP(a);
-		int[] b=p.getLFDPIndexByNumber(5);
-		int[] c=p.getLFDPIndexByThreshold(3);
+		PLR_IDP p=new PLR_IDP(a);
+		int[] b=p.getIDPIndexByNumber(5);
+		int[] c=p.getIDPIndexByThreshold(3);
 		System.out.print(1);
 	}
 

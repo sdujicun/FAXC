@@ -1,6 +1,6 @@
 package experiments;
 
-import weka.filters.timeseries.shapelet_transforms.ShapeletTransformBasedOnLFDP;
+import weka.filters.timeseries.shapelet_transforms.ShapeletTransformBasedOnIDP;
 
 public class ClassiferContrast {
 	static String[] problems = { 
@@ -22,7 +22,7 @@ public class ClassiferContrast {
 				 "bayesNet\t" + "RandF\t" + "RotF\t"+ "SVM\t" + "WeightedEnsemble");
 		for(String problem:problems){
 			System.out.print(problem+"\t");
-			new ShapeletTransformBasedOnLFDP().trainTestExample(problem);
+			new ShapeletTransformBasedOnIDP().trainTestExample(problem);
 		}
 	}
 }

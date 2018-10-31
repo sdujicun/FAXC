@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import weka.core.Instance;
 import weka.core.shapelet.Shapelet;
-import weka.filters.timeseries.shapelet_transforms.lfdp.PLR_LFDP;
+import weka.filters.timeseries.shapelet_transforms.idp.PLR_IDP;
 
 /**
  *
@@ -64,7 +64,7 @@ public class ShapeletSearch implements Serializable {
 		return seriesShapelets;
 	}
 	
-	public ArrayList<Shapelet> SearchForShapeletsInSeriesBasedLFDP(Instance timeSeries, ProcessCandidate checkCandidate) {
+	public ArrayList<Shapelet> SearchForShapeletsInSeriesBasedIDP(Instance timeSeries, ProcessCandidate checkCandidate) {
 		ArrayList<Shapelet> seriesShapelets = new ArrayList<>();
 
 		double[] series = timeSeries.toDoubleArray();
@@ -72,14 +72,11 @@ public class ShapeletSearch implements Serializable {
 		for (int i = 0; i < tempSeries.length; i++) {
 			tempSeries[i] = series[i];
 		}
-		int[] LFDP = new PLR_LFDP(tempSeries).getLFDPIndexByNumber((int) Math.ceil(0.05*tempSeries.length)+2);
+		int[] IDP = new PLR_IDP(tempSeries).getIDPIndexByNumber((int) Math.ceil(0.05*tempSeries.length)+2);
 		
-		//int[] LFDP = new PLR_LFDP(tempSeries).getLFDPIndexByNumber((int) Math.sqrt(series.length) + 1);		
-		for (int start = 0; start < LFDP.length - 2; start++) {
-			for (int end = start + 2; end < LFDP.length; end++) {
-				//System.out.println(start+"\t"+end);
-				//Shapelet shapelet = checkCandidate.process(series, LFDP[start], LFDP[end] - LFDP[start]);
-				Shapelet shapelet = checkCandidate.process(series, LFDP[start], LFDP[end] - LFDP[start]);
+	for (int start = 0; start < IDP.length - 2; start++) {
+			for (int end = start + 2; end < IDP.length; end++) {
+				Shapelet shapelet = checkCandidate.process(series, IDP[start], IDP[end] - IDP[start]);
 				if (shapelet != null) {
 					seriesShapelets.add(shapelet);
 				}
@@ -89,7 +86,7 @@ public class ShapeletSearch implements Serializable {
 		return seriesShapelets;
 	}
 	
-	public ArrayList<Shapelet> SearchForShapeletsInSeriesBasedLFDP(Instance timeSeries, ProcessCandidate checkCandidate, double LFDPrate) {
+	public ArrayList<Shapelet> SearchForShapeletsInSeriesBasedIDP(Instance timeSeries, ProcessCandidate checkCandidate, double IDPrate) {
 		ArrayList<Shapelet> seriesShapelets = new ArrayList<>();
 
 		double[] series = timeSeries.toDoubleArray();
@@ -97,13 +94,11 @@ public class ShapeletSearch implements Serializable {
 		for (int i = 0; i < tempSeries.length; i++) {
 			tempSeries[i] = series[i];
 		}
-		int[] LFDP = new PLR_LFDP(tempSeries).getLFDPIndexByNumber((int) Math.ceil(LFDPrate*tempSeries.length)+2);
-		
-		//int[] LFDP = new PLR_LFDP(tempSeries).getLFDPIndexByNumber((int) Math.sqrt(series.length) + 1);		
-		for (int start = 0; start < LFDP.length - 2; start++) {
-			for (int end = start + 2; end < LFDP.length; end++) {
-				//Shapelet shapelet = checkCandidate.process(series, LFDP[start], LFDP[end] - LFDP[start]);
-				Shapelet shapelet = checkCandidate.process(series, LFDP[start], LFDP[end] - LFDP[start]);
+		int[] IDP = new PLR_IDP(tempSeries).getIDPIndexByNumber((int) Math.ceil(IDPrate*tempSeries.length)+2);
+			
+		for (int start = 0; start < IDP.length - 2; start++) {
+			for (int end = start + 2; end < IDP.length; end++) {
+				Shapelet shapelet = checkCandidate.process(series, IDP[start], IDP[end] - IDP[start]);
 				if (shapelet != null) {
 					seriesShapelets.add(shapelet);
 				}
@@ -113,7 +108,7 @@ public class ShapeletSearch implements Serializable {
 		return seriesShapelets;
 	}
 	
-	public ArrayList<Shapelet> SearchForShapeletsInSeriesBasedLFDPWithNumberLimit(Instance timeSeries, ProcessCandidate checkCandidate, double LFDPrate) {
+	public ArrayList<Shapelet> SearchForShapeletsInSeriesBasedIDPWithNumberLimit(Instance timeSeries, ProcessCandidate checkCandidate, double IDPrate) {
 		ArrayList<Shapelet> seriesShapelets = new ArrayList<>();
 
 		double[] series = timeSeries.toDoubleArray();
@@ -121,13 +116,10 @@ public class ShapeletSearch implements Serializable {
 		for (int i = 0; i < tempSeries.length; i++) {
 			tempSeries[i] = series[i];
 		}
-		int[] LFDP = new PLR_LFDP(tempSeries).getLFDPIndexByNumber((int) Math.ceil(LFDPrate*tempSeries.length)+2);
-		
-		//int[] LFDP = new PLR_LFDP(tempSeries).getLFDPIndexByNumber((int) Math.sqrt(series.length) + 1);		
-		for (int start = 0; start < LFDP.length - 2; start++) {
-			for (int end = start + 2; end < LFDP.length&&end<=start+6; end++) {
-				//Shapelet shapelet = checkCandidate.process(series, LFDP[start], LFDP[end] - LFDP[start]);
-				Shapelet shapelet = checkCandidate.process(series, LFDP[start], LFDP[end] - LFDP[start]);
+		int[] IDP = new PLR_IDP(tempSeries).getIDPIndexByNumber((int) Math.ceil(IDPrate*tempSeries.length)+2);		
+		for (int start = 0; start < IDP.length - 2; start++) {
+			for (int end = start + 2; end < IDP.length&&end<=start+6; end++) {
+				Shapelet shapelet = checkCandidate.process(series, IDP[start], IDP[end] - IDP[start]);
 				if (shapelet != null) {
 					seriesShapelets.add(shapelet);
 				}

@@ -12,8 +12,8 @@ import utilities.ClassifierTools;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.shapelet.QualityMeasures;
-import weka.filters.timeseries.shapelet_transforms.ShapeletTransformBasedOnLFDP;
-import weka.filters.timeseries.shapelet_transforms.ShapeletTransformWithSubclassSampleAndLFDP;
+import weka.filters.timeseries.shapelet_transforms.ShapeletTransformBasedOnIDP;
+import weka.filters.timeseries.shapelet_transforms.ShapeletTransformWithSubclassSampleAndIDP;
 import weka.filters.timeseries.shapelet_transforms.classValue.BinarisedClassValue;
 import weka.filters.timeseries.shapelet_transforms.subsequenceDist.ImprovedOnlineSubSeqDistance;
 import ml.dmlc.xgboost4j.java.Booster;
@@ -330,7 +330,7 @@ public class XGBoostWithST {
 			File trainFile = new File(trainPath);
 			File testFile = new File(testPath);
 
-			ShapeletTransformWithSubclassSampleAndLFDP transform = new ShapeletTransformWithSubclassSampleAndLFDP();
+			ShapeletTransformWithSubclassSampleAndIDP transform = new ShapeletTransformWithSubclassSampleAndIDP();
 			transform.setRoundRobin(true);
 			transform.turnOffLog();
 			// construct shapelet classifiers.
@@ -442,7 +442,7 @@ public class XGBoostWithST {
 			File trainFile = new File(trainPath);
 			File testFile = new File(testPath);
 
-			ShapeletTransformWithSubclassSampleAndLFDP transform = new ShapeletTransformWithSubclassSampleAndLFDP();
+			ShapeletTransformWithSubclassSampleAndIDP transform = new ShapeletTransformWithSubclassSampleAndIDP();
 			transform.setRoundRobin(true);
 			transform.turnOffLog();
 			// construct shapelet classifiers.
