@@ -12,7 +12,6 @@ import utilities.ClassifierTools;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.shapelet.QualityMeasures;
-import weka.filters.timeseries.shapelet_transforms.ShapeletTransformBasedOnIDP;
 import weka.filters.timeseries.shapelet_transforms.ShapeletTransformWithSubclassSampleAndIDP;
 import weka.filters.timeseries.shapelet_transforms.classValue.BinarisedClassValue;
 import weka.filters.timeseries.shapelet_transforms.subsequenceDist.ImprovedOnlineSubSeqDistance;
