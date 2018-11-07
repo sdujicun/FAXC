@@ -1,6 +1,6 @@
 package experiments;
 
-import weka.filters.timeseries.shapelet_transforms.ShapeletTransformBasedOnIDP;
+import weka.filters.timeseries.shapelet_transforms.ShapeletTransformWithSubclassSampleAndIDP;
 
 public class ClassiferContrast {
 	static String[] problems = { 
@@ -18,11 +18,12 @@ public class ClassiferContrast {
 		"TwoLeadECG" 
 	};
 	public static void main(String[] args){
-		 System.out.println("dataset\t" + "C45\t"+"1NN\t" + "BN\t" +
+		 System.out.println("dataset\t" + "C45\t"+"1NN\t" + "bayes\t" +
 				 "bayesNet\t" + "RandF\t" + "RotF\t"+ "SVM\t" + "WeightedEnsemble");
 		for(String problem:problems){
 			System.out.print(problem+"\t");
-			new ShapeletTransformBasedOnIDP().trainTestExample(problem);
+			new ShapeletTransformWithSubclassSampleAndIDP().trainTestExample(problem);
 		}
+		
 	}
 }

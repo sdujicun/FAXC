@@ -1187,11 +1187,8 @@ public class ShapeletTransformWithSubclassSampleAndIDP extends SimpleBatchFilter
 			transform.useCandidatePruning();
 			transform.setNumberOfShapelets(train.numInstances() / 2);
 			transform.setQualityMeasure(QualityMeasures.ShapeletQualityChoice.INFORMATION_GAIN);
-			long d1 = System.nanoTime();
 			Instances tranTrain = transform.process(train);
 			Instances tranTest = transform.process(test);
-			long d2 = System.nanoTime();
-			// System.out.println((d2 - d1) * 0.000000001);
 
 			// 1C45
 			J48 tree = new J48();
@@ -1205,7 +1202,7 @@ public class ShapeletTransformWithSubclassSampleAndIDP extends SimpleBatchFilter
 			accuracy = ClassifierTools.accuracy(tranTest, k);
 			System.out.print(accuracy + "\t");
 
-			// 3BN
+			// 3Bayes
 			NaiveBayes nb = new NaiveBayes();
 			nb.buildClassifier(tranTrain);
 			accuracy = ClassifierTools.accuracy(tranTest, nb);
@@ -1240,11 +1237,11 @@ public class ShapeletTransformWithSubclassSampleAndIDP extends SimpleBatchFilter
 			accuracy = ClassifierTools.accuracy(tranTest, svml);
 			System.out.println(accuracy + "\t");
 
-			// // 8WeightedEnsemble
-			// WeightedEnsemble we = new WeightedEnsemble();
-			// we.buildClassifier(tranTrain);
-			// accuracy = ClassifierTools.accuracy(tranTest, we);
-			// System.out.println(accuracy);
+			 // 8WeightedEnsemble
+			 WeightedEnsemble we = new WeightedEnsemble();
+			 we.buildClassifier(tranTrain);
+			 accuracy = ClassifierTools.accuracy(tranTest, we);
+			 System.out.println(accuracy);
 
 		} catch (Exception ex) {
 			Logger.getLogger(ShapeletTransformWithSubclassSampleAndIDP.class.getName()).log(Level.SEVERE, null, ex);
